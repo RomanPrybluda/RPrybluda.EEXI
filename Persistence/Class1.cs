@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RPrybluda.EEXI.Persistence
+namespace RPrybluda.EEXI.EEXIconcole
 {
     public class Class1
     {

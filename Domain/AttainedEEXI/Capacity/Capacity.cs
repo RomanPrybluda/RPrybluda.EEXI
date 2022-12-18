@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RPrybluda.EEXI.Domain.AttainedEEXI
+namespace RPrybluda.EEXI.Domain
 {
-    static class Capacity
+    public static class Capacity
     {
         public static double resultCapacity;
 

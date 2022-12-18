@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RPrybluda.EEXI.Domain.AttainedEEXI.Factors
+namespace RPrybluda.EEXI.Domain
 {
-    static class Fm
+    public static class Fm
     {
         public static double resultFm;
 

@@ -4,9 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RPrybluda.EEXI.Domain.AttainedEEXI.Factors
+namespace RPrybluda.EEXI.Domain
 {
-    static class FjICEclass
+    // fj Ship specific design elements
+    // Correction factor for ice-class ships
+
+    // fj genaralcargo //  fj roro // 
+
+    public static class FjICEclass
     {
         public static double resultFjICEclass;
         public static double fJ0;

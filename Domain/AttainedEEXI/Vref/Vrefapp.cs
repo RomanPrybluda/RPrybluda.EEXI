@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace RPrybluda.EEXI.Domain.AttainedEEXI
+
+namespace RPrybluda.EEXI.Domain
 {
-    static class Vrefapp
+    public static class Vrefapp
     {
         public static double resultVrefapp;
         public static double vREFavg;

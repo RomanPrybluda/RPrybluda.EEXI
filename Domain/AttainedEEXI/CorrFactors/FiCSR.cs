@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RPrybluda.EEXI.Domain.AttainedEEXI.Factors
+namespace RPrybluda.EEXI.Domain
 {
-    static class FiCRS
+    // fi Capacity factor for technical/regulatory limitation on capacity
+    // Capacity correction factor for ships under Common Structural Rules (CSR)
+
+    public static class FiCRS
     {
         public static double resultFiCRS;
 

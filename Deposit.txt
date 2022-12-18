@@ -1,0 +1,169 @@
+
+//        double shipType;
+//        double deadweight; double deadweightCRS; double lwtCSR;
+//        double iceClass;
+//        double mcrME; double mcrMElim;  double fluelTypeME; double sfcME;
+//        double fluelTypeAE; double sfcAE;
+//        double mcrPTO; double mcrPTI;
+//        double vREF;
+
+
+
+            Console.WriteLine("Calculation of the required EEXI and attained EEXI\n" +
+                              "and their comparison.\n\n");
+
+            // Input Data
+
+            Console.WriteLine("Input ship type:");
+            Console.WriteLine("1 - Bulk carrier  |  5 - General cargo ship");
+            Console.WriteLine("2 - Gas carrier   |  6 - Refrigerated cargo carrier");
+            Console.WriteLine("3 - Tanker        |  7 - Combination carrier");
+            Console.WriteLine("4 - Containership |  8 - LNG carrier");
+
+
+
+
+
+
+            /* 
+
+            Console.WriteLine("-------------------------------------------------------------------------------\n");
+
+            Console.WriteLine("Input Deadweight CSR:");
+            double deadweightCRS = double.Parse(Console.ReadLine());
+
+            Console.WriteLine("\nInput LWT CSR:");
+            double lwtCSR = double.Parse(Console.ReadLine());
+
+            Console.WriteLine("----------------------------------------------------------------------------\n");
+
+            Console.WriteLine("Input ice class:");
+            Console.WriteLine("0 - N/A");
+            Console.WriteLine("1 - IA Super | 2 - IA  | 3 - IB |  4 - IC");
+            double iceClass = double.Parse(Console.ReadLine());
+
+            Console.WriteLine("----------------------------------------------------------------------------\n");
+
+            Console.WriteLine("Input MRC of ME (s), kW:");
+            double mcrME = double.Parse(Console.ReadLine());
+
+            Console.WriteLine("\nInput MRClim of ME (s), kW:");
+            double mcrMElim = double.Parse(Console.ReadLine());
+
+            Console.WriteLine("----------------------------------------------------------------------------\n");
+
+            Console.WriteLine("Fuel type:");
+            Console.WriteLine("1 - Diesel / Gas oil | 4 - Liquefied petroleum Gas (Propane) | 7 - Methanol");
+            Console.WriteLine("2 - Light fuel oil   | 5 - Liquefied petroleum Gas (Butane)  | 8 - Ethanol");
+            Console.WriteLine("3 - Heavy fuel oil   | 6 - Liquefied natural gas             |\n");
+
+            Console.WriteLine("Input fluel type of ME:");
+            double fluelTypeME = double.Parse(Console.ReadLine());
+
+            Console.WriteLine("\nInput fluel type of AE:");
+            double fluelTypeAE = double.Parse(Console.ReadLine());
+
+            Console.WriteLine("----------------------------------------------------------------------------\n");
+
+            Console.WriteLine("Input SFC of ME (75% MRC), g/kWh:");
+            double sfcME = double.Parse(Console.ReadLine());
+
+            Console.WriteLine("\nInput SFC of AE (50% MRC), g/kWh:");
+            double sfcAE = double.Parse(Console.ReadLine());
+
+
+            Console.WriteLine("----------------------------------------------------------------------------\n");
+
+            Console.WriteLine("Input power Shaft generator (s), MCRpto kWh:");
+            double mcrPTO = double.Parse(Console.ReadLine());
+
+            Console.WriteLine("Input power Shaft motor (s), MCRpti kWh:");
+            double mcrPTI = double.Parse(Console.ReadLine());
+
+            Console.WriteLine("----------------------------------------------------------------------------\n");
+
+            Console.WriteLine("Input Vref:");
+            double vREF = double.Parse(Console.ReadLine());
+
+            Console.WriteLine("----------------------------------------------------------------------------");
+
+              double swl01; double swl02; double swl03; double swl04;
+              double reach01; double reach02; double reach03; double reach04;
+
+              Console.WriteLine("Input cranes data:\n");
+
+              Console.WriteLine("Input swl01:");
+              swl01 = double.Parse(Console.ReadLine());
+              Console.WriteLine("Input reach01:");
+              reach01 = double.Parse(Console.ReadLine());
+
+              Console.WriteLine("Input swl02:");
+              swl02 = double.Parse(Console.ReadLine());
+              Console.WriteLine("Input reach02:");
+              reach02 = double.Parse(Console.ReadLine());
+
+              Console.WriteLine("Input swl03:");
+              swl03 = double.Parse(Console.ReadLine());
+              Console.WriteLine("Input reach03:");
+              reach03 = double.Parse(Console.ReadLine());
+
+              Console.WriteLine("Input swl04:");
+              swl04 = double.Parse(Console.ReadLine());
+              Console.WriteLine("Input reach04:");
+              reach04 = double.Parse(Console.ReadLine());
+
+           */
+
+
+
+/*Console.WriteLine("\n----------------------------------------------------------------------------\n");
+
+            Console.WriteLine("Power of ME (s) " + Pme.resultPme + " kW");
+            Console.WriteLine("Cf of ME " + FactorCfME.resultFactorCfME + " t*C02/t*Fuel");
+            Console.WriteLine("SFC of ME " + SFCme.resultSFCme + " g/kWh");
+            Console.WriteLine("\n");
+
+            Console.WriteLine("Power of AEs " + Pae.resultPae + " kW");
+            Console.WriteLine("Cf of AE " + FactorCfAE.resultFactorCfAE + " t*C02/t*Fuel");
+            Console.WriteLine("SFC of AE " + SFCae.resultSFCae + " g/kWh");
+            Console.WriteLine("\n");
+
+            Console.WriteLine("Capacity " + Capacity.resultCapacity + " tons");
+            Console.WriteLine("Vref " + Vref.resultVref + " knots");
+            Console.WriteLine("\n");
+
+            Console.WriteLine("Correction factors");
+            Console.WriteLine("Fj = " + FjICEclass.resultFjICEclass);
+            Console.WriteLine("Fi = " + Fi.resultFi);
+            Console.WriteLine("Fl = " + Fl.resultFl);
+            Console.WriteLine("Fm = " + Fm.resultFm);
+            Console.WriteLine("Fc = " + Fc.resultFc);
+            Console.WriteLine("Fw = " + Fw.resultFm);
+
+
+            Console.WriteLine("\nAttained EEXI " + AttainedEEXI.resultAttEEXI);
+
+            Console.WriteLine("\n----------------------------------------------------------------------------\n");
+
+
+            // Conclusion ---------------------------------------------------------------------------------------
+
+
+            Console.WriteLine("\nConclusion------------------------------------------------------------------\n");
+
+            if (AttainedEEXI.resultAttEEXI <= ReqEEXI.resultReqEEXI)
+            {
+                Console.WriteLine("Attained EEXI less or equal Required EEXI\n" +
+                                  "Attained EEXI <= Required EEXI\n" +
+                                  "Since the attained EEXI is less than the required EEXI,\n" +
+                                  " then the vessel complies with the energy efficiency requirements");
+            }
+            
+            else 
+            {
+                Console.WriteLine("Attained EEXI more than Required EEXI \n " +
+                                  "Attained EEXI > Required EEXI\n" +
+                                  "Since the resulting EEXI factor more requires the EEXI factor, \n" +
+                                  "it is necessary to provide an action to improve the energy efficiency of consumption. ");
+            }
+            */

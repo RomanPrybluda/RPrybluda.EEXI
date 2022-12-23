@@ -31,7 +31,7 @@ namespace RPrybluda.EEXI.EEXIconsole
             double deadweight = Convert.ToDouble(Console.ReadLine());
 
             Console.WriteLine("\nInput Vref:");
-            double vRefS = double.Parse(Console.ReadLine());
+            double vRefIn = double.Parse(Console.ReadLine());
 
             Console.WriteLine("\nInput ice class:");
             Console.WriteLine("0 - N/A");
@@ -56,9 +56,9 @@ namespace RPrybluda.EEXI.EEXIconsole
             string fuelTypeAE = Console.ReadLine();
 
             Console.WriteLine("\nInput SFC of ME (75% MRC), g/kWh:");
-            double sfcME = double.Parse(Console.ReadLine());
+            double sfcMEin = double.Parse(Console.ReadLine());
             Console.WriteLine("Input SFC of AE (50% MRC), g/kWh:");
-            double sfcAE = double.Parse(Console.ReadLine());
+            double sfcAEin = double.Parse(Console.ReadLine());
 
             Console.WriteLine("\n--------------------------------------------------------------------------");
 
@@ -86,11 +86,18 @@ namespace RPrybluda.EEXI.EEXIconsole
 
             // Calculation Attained EEXI
 
-            double capacity = Capacity.CalcCapacity(deadweight, shipType);
+            
             double pAE = Pae.CalcPae(mcrME, mcrPTI);
-            double pME = Pme.CalcPme(mcrME, mcrMElim, mcrPTO, pAE);
+            double pME = Pme.CalcPme(mcrME, mcrMElim, mcrPTO);
+
+            double capacity = Capacity.CalcCapacity(deadweight, shipType);
             double vRefApp = Vrefapp.CalcVrefapp(shipType, deadweight, pME);
-            double vRef = Vref.CalcVref(vRefS, vRefApp);
+            double vRef = Vref.CalcVref(vRefIn, vRefApp);
+            
+            double sfcME = SFCme.CalcSFCme(sfcMEin);
+            double sfcAE = SFCae.CalcSFCae(sfcAEin);
+            double factorCfME = FactorCfME.CalcFactorCfME(fuelTypeME);
+            double factorCfAE = FactorCfAE.CalcFactorCfAE(fuelTypeAE);
 
 
 
@@ -113,30 +120,33 @@ namespace RPrybluda.EEXI.EEXIconsole
             Console.WriteLine("EEDI Reference line value = " + (Math.Round(refLineValueEEDI, 3, MidpointRounding.AwayFromZero)) + " g-CO2/tonMile");
             Console.WriteLine("Reduction factor = " + (Math.Round(reductFactor, 1, MidpointRounding.AwayFromZero)));
             Console.WriteLine("Required EEXI = " + (Math.Round(reqEEXI, 3, MidpointRounding.AwayFromZero)) + " gCO2/t.NM");
-            Console.WriteLine("\n============================================================================");
-
+            
             // Output Attained EEXI calculation results  
 
             Console.WriteLine("\n============================================================================");
             Console.WriteLine("\nCalculation Attained EEXI:\n");
             
-            Console.WriteLine("Power of ME (s) " + Pme.pME + " kW");
-            Console.WriteLine("Cf of ME " + FactorCfME.resultFactorCfME + " tC02/tFuel");
-            Console.WriteLine("SFC of ME " + SFCme.resultSFCme + " g/kWh");
+            Console.WriteLine("Power of ME (s) " + pME + " kW");
+            Console.WriteLine("Cf of ME " + FactorCfME.CalcFactorCfME(fuelTypeME) + " tC02/tFuel");
+            Console.WriteLine("SFC of ME " + sfcME + " g/kWh");
 
-            Console.WriteLine("\nPower of AEs " + Pae.pAE + " kW");
-            Console.WriteLine("Cf of AE " + FactorCfAE.resultFactorCfAE + " tC02/tFuel");
-            Console.WriteLine("SFC of AE " + SFCae.resultSFCae + " g/kWh");
+            Console.WriteLine("\nPower of AEs " + pAE + " kW");
+            Console.WriteLine("Cf of AE " + FactorCfAE.CalcFactorCfAE(fuelTypeAE) + " tC02/tFuel");
+            Console.WriteLine("SFC of AE " + sfcAE + " g/kWh");
 
             Console.WriteLine("\nCapacity " + capacity + " tons");
-            Console.WriteLine("Vref " + vRef + " knots");
-            
+           
+            Console.WriteLine("\nVref = " + (Math.Round(vRef, 2, MidpointRounding.AwayFromZero)) + " knots");
+            Console.WriteLine("Vrefavg = " + (Math.Round(Vrefapp.vRefAvg, 2, MidpointRounding.AwayFromZero)) + " knots");
+            Console.WriteLine("MCRavg = " + (Math.Round(Vrefapp.mcrAvg, 2, MidpointRounding.AwayFromZero)) + " knots");
+            Console.WriteLine("mv = " + (Math.Round(Vrefapp.mv, 2, MidpointRounding.AwayFromZero)) + " knots");
+
             Console.WriteLine("\nCorrection factors:");
             Console.WriteLine("Fj = " + FjICEclass.fJiceClass);
             Console.WriteLine("Fi = " + Fi.resultFi);
             Console.WriteLine("Fl = " + Fl.resultFl);
             Console.WriteLine("Fm = " + Fm.resultFm);
-            Console.WriteLine("Fc = " + Fc.resultFc);
+            Console.WriteLine("Fc = " + Fc.factorFc);
             Console.WriteLine("Fw = " + Fw.resultFm);
 
             Console.WriteLine("Attained EEXI = " + (Math.Round(AttainedEEXI.attEEXI, 3, MidpointRounding.AwayFromZero)) + " gCO2/t.NM");

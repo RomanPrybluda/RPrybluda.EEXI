@@ -7,14 +7,14 @@ namespace RPrybluda.EEXI.Domain
     public static class SFCae
     {
 
-        public static double resultSFCae;
+        public static double sfcAE;
 
-        public static double CalcSFCae(double sfcAE)
+        public static double CalcSFCae(double sfcAEin)
         {
-            if (sfcAE == 0) resultSFCae = 215;
-                       else resultSFCae = sfcAE; 
+            if (sfcAE == 0) sfcAE = SFCapp.SFCaeApp;
+                       else sfcAE = sfcAEin; 
             
-            return resultSFCae;
+            return sfcAE;
 
         }    
      }       

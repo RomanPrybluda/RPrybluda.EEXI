@@ -8,7 +8,7 @@ namespace RPrybluda.EEXI.Domain
 {
     public static class SFCapp
     {
-        public const double SFCmeapp = 190;
-        public const double SFCaeapp = 215;
+        public const double SFCmeApp = 190;
+        public const double SFCaeApp = 215;
     }
 }

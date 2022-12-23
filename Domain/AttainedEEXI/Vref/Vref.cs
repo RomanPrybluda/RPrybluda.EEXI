@@ -7,10 +7,10 @@ namespace RPrybluda.EEXI.Domain
     {
         public static double vRef;
 
-        public static double CalcVref(double vRefS, double vRefApp)
+        public static double CalcVref(double vRefIn, double vRefApp)
         {
-            if (vRef == 0) { vRef = vRefApp; }
-                      else { vRef = vRefS; };
+            if (vRefIn == 0) { vRef = vRefApp; }
+                      else { vRef = vRefIn; };
             
             return vRef;
         }

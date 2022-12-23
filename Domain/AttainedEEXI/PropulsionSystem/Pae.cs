@@ -7,7 +7,7 @@ namespace RPrybluda.EEXI.Domain
     {
         public static double pAE;
 
-        public static double CalcPae(double mcrME, double mcrPTI) // MRCme Ppti
+        public static double CalcPae(double mcrME, double mcrPTI)
         {
             if (mcrME + mcrPTI / 0.75 < 10000) // < 10000 kW
             {

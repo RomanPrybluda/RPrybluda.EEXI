@@ -5,51 +5,51 @@ namespace RPrybluda.EEXI.Domain
 {
     public static class FactorCfME
     {
-        public static double resultFactorCfME;
+        public static double factorCfME;
 
-        public static double CalcFactorCfME(double fluelTypeME)
+        public static double CalcFactorCfME(string fluelTypeME)
         {
-            if (fluelTypeME == 1) // Diesel / Gas oil
+            if (fluelTypeME == "Diesel / Gas oil") 
             {
-                resultFactorCfME = 3.203;
+                factorCfME = Cf.DO_GO;
             }
 
-            if (fluelTypeME == 2) // Light fuel oil
+            if (fluelTypeME == "Light fuel oil") 
             {
-                resultFactorCfME = 3.151;
+                factorCfME = Cf.LFO;
             }
 
-            if (fluelTypeME == 3) // Heavy fuel oil
+            if (fluelTypeME == "Heavy fuel oil") 
             {
-                resultFactorCfME = 3.114;
+                factorCfME = Cf.HFO;
             }
 
-            if (fluelTypeME == 4) // Liquefied petroleum Gas (Propane)
+            if (fluelTypeME == "Liquefied petroleum Gas (Propane)") 
             {
-                resultFactorCfME = 3.000;
+                factorCfME = Cf.LPG_PROPANE;
             }
 
-            if (fluelTypeME == 5) // Liquefied petroleum Gas (Butane)
+            if (fluelTypeME == "Liquefied petroleum Gas (Butane)") 
             {
-                resultFactorCfME = 3.030;
+                factorCfME = Cf.LPG_BUTANE;
             }
 
-            if (fluelTypeME == 6) // Liquefied natural gas
+            if (fluelTypeME == "Liquefied natural gas") 
             {
-                resultFactorCfME = 2.750;
+                factorCfME = Cf.LNG;
             }
 
-            if (fluelTypeME == 7) // Methanol
+            if (fluelTypeME == "Methanol") 
             {
-                resultFactorCfME = 1.375;
+                factorCfME = Cf.METHANOL;
             }
 
-            if (fluelTypeME == 8) // Ethanol
+            if (fluelTypeME == "Ethanol") 
             {
-                resultFactorCfME = 1.913;
+                factorCfME = Cf.ETHANOL;
             }
 
-            return resultFactorCfME;
+            return factorCfME;
         }
     }
 }

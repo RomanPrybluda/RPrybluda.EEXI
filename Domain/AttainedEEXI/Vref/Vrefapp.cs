@@ -70,7 +70,7 @@ namespace RPrybluda.EEXI.Domain
                 mv = 1;
             }
 
-            vRefApp = (vRefAvg - mv) * Math.Pow(pME / (0.75 * mcrAvg), 1 / 3);
+            vRefApp = (vRefAvg - mv) * Math.Pow (pME / (0.75 * mcrAvg ), 0.333333);
 
             return vRefApp;
         }

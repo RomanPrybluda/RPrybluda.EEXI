@@ -8,7 +8,7 @@ namespace RPrybluda.EEXI.Domain
 {
     public static class Fc
     {
-        public static double resultFc;
+        public static double factorFc;
 
         // fc Cubic capacity correction factor
 
@@ -22,11 +22,11 @@ namespace RPrybluda.EEXI.Domain
             */
 
 
-        public static double CalcFc()
+        public static double CalcFactorFc()
         {
-            double resultFc = 1;
+            double factorFc = 1;
             
-            return resultFc;
+            return factorFc;
 
         }
     }

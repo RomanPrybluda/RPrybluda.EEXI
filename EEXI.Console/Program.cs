@@ -20,15 +20,18 @@ namespace RPrybluda.EEXI.EEXIconsole
             Console.WriteLine("\nInput IMO No.");
             uint imoNumber = Convert.ToUInt32(Console.ReadLine());
 
-            Console.WriteLine("\nInput Deadweight, tons:");
-            double deadweight = Convert.ToDouble(Console.ReadLine());
-
             Console.WriteLine("\nInput ship type:");
             Console.WriteLine("| 1 - Bulk carrier  |  5 - General cargo ship         |");
             Console.WriteLine("| 2 - Gas carrier   |  6 - Refrigerated cargo carrier |");
             Console.WriteLine("| 3 - Tanker        |  7 - Combination carrier        |");
             Console.WriteLine("| 4 - Containership |  8 - LNG carrier                |");
             string shipType = Console.ReadLine();
+
+            Console.WriteLine("\nInput Deadweight, tons:");
+            double deadweight = Convert.ToDouble(Console.ReadLine());
+
+            Console.WriteLine("\nInput Vref:");
+            double vRefS = double.Parse(Console.ReadLine());
 
             Console.WriteLine("\nInput ice class:");
             Console.WriteLine("0 - N/A");
@@ -83,6 +86,11 @@ namespace RPrybluda.EEXI.EEXIconsole
 
             // Calculation Attained EEXI
 
+            double capacity = Capacity.CalcCapacity(deadweight, shipType);
+            double pAE = Pae.CalcPae(mcrME, mcrPTI);
+            double pME = Pme.CalcPme(mcrME, mcrMElim, mcrPTO, pAE);
+            double vRefApp = Vrefapp.CalcVrefapp(shipType, deadweight, pME);
+            double vRef = Vref.CalcVref(vRefS, vRefApp);
 
 
 
@@ -104,21 +112,59 @@ namespace RPrybluda.EEXI.EEXIconsole
             Console.WriteLine("\nCalculation Required EEXI:\n");
             Console.WriteLine("EEDI Reference line value = " + (Math.Round(refLineValueEEDI, 3, MidpointRounding.AwayFromZero)) + " g-CO2/tonMile");
             Console.WriteLine("Reduction factor = " + (Math.Round(reductFactor, 1, MidpointRounding.AwayFromZero)));
-            Console.WriteLine("Required EEXI = " + (Math.Round(reqEEXI, 3, MidpointRounding.AwayFromZero)) + " g-CO2/tonMile");
+            Console.WriteLine("Required EEXI = " + (Math.Round(reqEEXI, 3, MidpointRounding.AwayFromZero)) + " gCO2/t.NM");
             Console.WriteLine("\n============================================================================");
 
             // Output Attained EEXI calculation results  
 
             Console.WriteLine("\n============================================================================");
             Console.WriteLine("\nCalculation Attained EEXI:\n");
+            
+            Console.WriteLine("Power of ME (s) " + Pme.pME + " kW");
+            Console.WriteLine("Cf of ME " + FactorCfME.resultFactorCfME + " tC02/tFuel");
+            Console.WriteLine("SFC of ME " + SFCme.resultSFCme + " g/kWh");
+
+            Console.WriteLine("\nPower of AEs " + Pae.pAE + " kW");
+            Console.WriteLine("Cf of AE " + FactorCfAE.resultFactorCfAE + " tC02/tFuel");
+            Console.WriteLine("SFC of AE " + SFCae.resultSFCae + " g/kWh");
+
+            Console.WriteLine("\nCapacity " + capacity + " tons");
+            Console.WriteLine("Vref " + vRef + " knots");
+            
+            Console.WriteLine("\nCorrection factors:");
+            Console.WriteLine("Fj = " + FjICEclass.fJiceClass);
+            Console.WriteLine("Fi = " + Fi.resultFi);
+            Console.WriteLine("Fl = " + Fl.resultFl);
+            Console.WriteLine("Fm = " + Fm.resultFm);
+            Console.WriteLine("Fc = " + Fc.resultFc);
+            Console.WriteLine("Fw = " + Fw.resultFm);
+
+            Console.WriteLine("Attained EEXI = " + (Math.Round(AttainedEEXI.attEEXI, 3, MidpointRounding.AwayFromZero)) + " gCO2/t.NM");
 
             Console.WriteLine("\n============================================================================");
 
+            Console.WriteLine("\nConclusion:\n");
+
+            if (AttainedEEXI.attEEXI <= reqEEXI)
+            {
+                Console.WriteLine("Attained EEXI less or equal Required EEXI\n" +
+                                  "Attained EEXI <= Required EEXI\n" +
+                                  "Since the attained EEXI is less than the required EEXI,\n" +
+                                  " then the vessel complies with the energy efficiency requirements.");
+            }
+
+            else
+            {
+                Console.WriteLine("Attained EEXI more than Required EEXI \n " +
+                                  "Attained EEXI > Required EEXI\n" +
+                                  "Since the resulting EEXI factor more requires the EEXI factor, \n" +
+                                  "it is necessary to provide an action to improve the energy efficiency of consumption.");
+            }
+
+            Console.WriteLine("\n============================================================================");
 
             Console.ReadKey();
 
         }
-
     }
-
 }

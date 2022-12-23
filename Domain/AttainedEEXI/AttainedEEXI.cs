@@ -12,14 +12,14 @@ namespace RPrybluda.EEXI.Domain
         (double resultPme, double resultFactorCfME, double sfcME,
          double resultPae, double resultFactorCfAE, double sfcAE,
          
-         double resultCapacity, double resultVrefapp,
+         double сapacity, double resultVrefapp,
          
-         double resultFjICEclass, double resultFiCRS, double resultFi, 
+         double fJiceClass, double resultFiCRS, double resultFi, 
          double resultFc, double resultFl, double resultFw, double resultFm)
 
         {
-            double attEEXI = resultFjICEclass * (resultPme * resultFactorCfME * sfcME + resultPae * resultFactorCfAE * sfcAE) 
-                / (resultFiCRS * resultFi * resultFc * resultFl * resultCapacity * resultFw * resultVrefapp * resultFm);
+            double attEEXI = fJiceClass * (resultPme * resultFactorCfME * sfcME + resultPae * resultFactorCfAE * sfcAE) 
+                / (resultFiCRS * resultFi * resultFc * resultFl * сapacity * resultFw * resultVrefapp * resultFm);
 
             return attEEXI;
         }

@@ -5,14 +5,15 @@ namespace RPrybluda.EEXI.Domain
 {
     public static class Vref
     {
-        public static double resultVref;
+        public static double vRef;
 
-        public static double CalcVref(double vREF, double resultVrefapp)
+        public static double CalcVref(double vRefS, double vRefApp)
         {
-            if (vREF == 0) { resultVref = resultVrefapp; }
-                      else { resultVref = vREF; };
+            if (vRef == 0) { vRef = vRefApp; }
+                      else { vRef = vRefS; };
             
-            return resultVref;
+            return vRef;
         }
+
     }
 }

@@ -8,20 +8,20 @@ namespace RPrybluda.EEXI.Domain
 {
     public static class Capacity
     {
-        public static double resultCapacity;
+        public static double capacity;
 
-        public static double CalcCapacity(double deadweight, double shipType) // Capacity
+        public static double CalcCapacity(double deadweight, string shipType) // Capacity
         {
-            if (shipType == 4) // Containership
+            if (shipType == "Containership")
             {
-                resultCapacity = 0.70 * deadweight;
+                capacity = 0.70 * deadweight;
             }
             else // Ship types other than Containership
             {
-                resultCapacity = deadweight;
+                capacity = deadweight;
             }
 
-            return resultCapacity;
+            return capacity;
         }
     }
 }

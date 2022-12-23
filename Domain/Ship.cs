@@ -12,7 +12,7 @@ namespace RPrybluda.EEXI.Domain
         public uint IMOnumber { get; set; }
         public string ShipType { get; set; }
         public double Deadweight { get; set; }
-        public double IceClass { get; set; }
+        public string IceClass { get; set; }
 
         public Ship (string shipName, uint imoNumber, string shipType, double deadweight, string iceClass)
         {

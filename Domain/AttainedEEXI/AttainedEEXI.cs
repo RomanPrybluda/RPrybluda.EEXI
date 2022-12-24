@@ -1,4 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 
 namespace RPrybluda.EEXI.Domain
@@ -9,17 +14,16 @@ namespace RPrybluda.EEXI.Domain
 
         public static double CalcAttEEXI
 
-        (double resultPme, double resultFactorCfME, double sfcME,
-         double resultPae, double resultFactorCfAE, double sfcAE,
+        (double pME, double factorCfME, double sfcME,
+         double pAE, double factorCfAE, double sfcAE,
          
-         double сapacity, double resultVrefapp,
+         double capacity, double vRef,
          
-         double fJiceClass, double resultFiCRS, double resultFi, 
-         double resultFc, double resultFl, double resultFw, double resultFm)
+         double fJ, double fI, double fC, 
+         double fL, double fW, double fM)
 
         {
-            double attEEXI = fJiceClass * (resultPme * resultFactorCfME * sfcME + resultPae * resultFactorCfAE * sfcAE) 
-                / (resultFiCRS * resultFi * resultFc * resultFl * сapacity * resultFw * resultVrefapp * resultFm);
+            double attEEXI = ( fJ * (pME * factorCfME * sfcME) + (pAE * factorCfAE * sfcAE) ) / ( fI * fC * fL * capacity * fW * vRef * fM);
 
             return attEEXI;
         }

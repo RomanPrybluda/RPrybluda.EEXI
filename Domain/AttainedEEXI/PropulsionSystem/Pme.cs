@@ -7,7 +7,7 @@ namespace RPrybluda.EEXI.Domain
     {
         public static double pME;
 
-        public static double CalcPme(double mcrME, double mcrMElim, double mcrPTO)
+        public static double CalcPme(double mcrME, double mcrMElim, double mcrPTO, double pPTO)
         {
             {
                 if (mcrPTO == 0 & mcrMElim == 0) // clause 1.1
@@ -20,17 +20,11 @@ namespace RPrybluda.EEXI.Domain
                     pME = 0.83 * mcrMElim;
                 }
 
-                /*
-                if (mcrPTO > 0 & 0.75 * mcrPTO <= pAE) // clause 2.2.5.2 Option 1
+                if (mcrPTO > 0 ) // clause 2.2.5.2 Option 1
                 {
-                    pME = 0.75 * mcrME - 0.75 * mcrPTO;
+                    pME = 0.75 * ( mcrME - pPTO);
                 }
-                else
-                {
-                    pME = 0.75 * mcrME - pAE;
-                }
-                */
-
+                
                 return pME;
 
             }

@@ -9,8 +9,15 @@ namespace RPrybluda.EEXI.Domain
 
         public static double CalcVref(double vRefIn, double vRefApp)
         {
-            if (vRefIn == 0) { vRef = vRefApp; }
-                      else { vRef = vRefIn; };
+            if (vRefIn == 0) 
+            { 
+                vRef = vRefApp; 
+            }
+
+            if (vRefIn > 0)
+            { 
+                vRef = vRefIn; 
+            };
             
             return vRef;
         }

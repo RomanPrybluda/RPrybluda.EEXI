@@ -8,7 +8,7 @@ namespace RPrybluda.EEXI.Domain
 {
     public static class Fcranes
     {
-        public static double resultFcranes;
+        public static double fLcranes;
 
         public static double CalcFcranes
             (double capacity,
@@ -18,7 +18,7 @@ namespace RPrybluda.EEXI.Domain
         {
             if (swl01 > 0 & reach01 > 0)
             {
-                resultFcranes = 1 +
+                fLcranes = 1 +
                   (0.0519 * swl01 * reach01 + 32.11
                 + (0.0519 * swl02 * reach02 + 32.11)
                 + (0.0519 * swl03 * reach03 + 32.11)
@@ -28,10 +28,10 @@ namespace RPrybluda.EEXI.Domain
 
             else
             {
-                resultFcranes = 1;
+                fLcranes = 1;
             }
 
-            return resultFcranes;
+            return fLcranes;
 
         }
     }

@@ -3,12 +3,17 @@
 
 namespace RPrybluda.EEXI.Domain
 {
-    public static class FactorCfME
+    public static class CfME
     {
         public static double factorCfME;
 
-        public static double CalcFactorCfME(string fluelTypeME)
+        public static double CalcFactorCfME(string fluelTypeME, double sfcMEin)
         {
+            if ( sfcMEin == 0 )
+            {
+                factorCfME = Cf.HFO;
+            }
+
             if (fluelTypeME == "Diesel / Gas oil") 
             {
                 factorCfME = Cf.DO_GO;

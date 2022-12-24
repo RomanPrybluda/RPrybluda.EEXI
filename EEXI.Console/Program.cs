@@ -21,15 +21,14 @@ namespace RPrybluda.EEXI.EEXIconsole
             uint imoNumber = Convert.ToUInt32(Console.ReadLine());
 
             Console.WriteLine("\nInput ship type:");
-            Console.WriteLine("| 1 - Bulk carrier  |  5 - General cargo ship         |");
-            Console.WriteLine("| 2 - Gas carrier   |  6 - Refrigerated cargo carrier |");
-            Console.WriteLine("| 3 - Tanker        |  7 - Combination carrier        |");
-            Console.WriteLine("| 4 - Containership |  8 - LNG carrier                |");
+            Console.WriteLine("| 1 - Bulk carrier  |  5 - General cargo ship         |  9 - Ro-ro cargo ship (vehicle carrier)                        |");
+            Console.WriteLine("| 2 - Gas carrier   |  6 - Refrigerated cargo carrier |  10 - Ro-ro cargo ship                                         |");
+            Console.WriteLine("| 3 - Tanker        |  7 - Combination carrier        |  11 - Ro-ro passenger ship                                     |");
+            Console.WriteLine("| 4 - Containership |  8 - LNG carrier                |  12 - Cruise passenger ship having non-conventional propulsion |");
             string shipType = Console.ReadLine();
 
             Console.WriteLine("\nInput ice class:");
-            Console.WriteLine("0 - N/A");
-            Console.WriteLine("1 - IA Super | 2 - IA  | 3 - IB |  4 - IC");
+            Console.WriteLine("| 0 - N/A  |  1 - IA Super  |  2 - IA   |  3 - IB  |  4 - IC  |");
             string iceClass = Console.ReadLine();
 
             Console.WriteLine("\n--------------------------------------------------------------------------");
@@ -37,7 +36,10 @@ namespace RPrybluda.EEXI.EEXIconsole
             Console.WriteLine("\nInput Deadweight, tons:");
             double deadweight = Convert.ToDouble(Console.ReadLine());
 
-            Console.WriteLine("\nInput Vref:");
+            Console.WriteLine("\nInput GROSS TONNAGES:");
+            double grossTonnage = Convert.ToDouble(Console.ReadLine());
+
+            Console.WriteLine("\nInput Vref: (input 0 if no data)");
             double vRefIn = double.Parse(Console.ReadLine());
 
             Console.WriteLine("\n--------------------------------------------------------------------------");
@@ -57,9 +59,9 @@ namespace RPrybluda.EEXI.EEXIconsole
             Console.WriteLine("Input fluel type of AE:");
             string fuelTypeAE = Console.ReadLine();
 
-            Console.WriteLine("\nInput SFC of ME (75% MRC), g/kWh:");
+            Console.WriteLine("\nInput SFC ISO of ME (75% MRC), g/kWh (input 0 if no data):");
             double sfcMEin = double.Parse(Console.ReadLine());
-            Console.WriteLine("Input SFC of AE (50% MRC), g/kWh:");
+            Console.WriteLine("Input SFC ISO of AE (50% MRC), g/kWh (input 0 if no data):");
             double sfcAEin = double.Parse(Console.ReadLine());
 
             Console.WriteLine("\n--------------------------------------------------------------------------");
@@ -94,13 +96,13 @@ namespace RPrybluda.EEXI.EEXIconsole
             double pME = Pme.CalcPme(mcrME, mcrMElim, mcrPTO, pPTO);
 
             double capacity = Capacity.CalcCapacity(deadweight, shipType);
-            double vRefApp = Vrefapp.CalcVrefapp(shipType, deadweight, pME);
+            double vRefApp = Vrefapp.CalcVrefapp(shipType, deadweight, pME, grossTonnage);
             double vRef = Vref.CalcVref(vRefIn, vRefApp);
             
             double sfcME = SFCme.CalcSFCme(sfcMEin);
-            double sfcAE = SFCae.CalcSFCae(sfcAEin);
+            double sfcAE = SFCae.CalcSFCae(sfcAEin, mcrPTO, sfcME);
             double factorCfME = CfME.CalcFactorCfME(fuelTypeME, sfcMEin);
-            double factorCfAE = CfAE.CalcFactorCfAE(fuelTypeAE, sfcAEin);
+            double factorCfAE = CfAE.CalcFactorCfAE(fuelTypeAE, sfcAEin, mcrPTO, factorCfME);
 
             double fJ = 1.0;   double fI = 1.0;   double fL = 1.0;
             double fM = 1.0;   double fC = 1.0;   double fW = 1.0;
@@ -128,14 +130,19 @@ namespace RPrybluda.EEXI.EEXIconsole
 
             Console.WriteLine("\n============================================================================");
             Console.WriteLine("\nCalculation Attained EEXI:\n");
-            
+
+            // Output Main and Auxiliry Engines data
+
             Console.WriteLine("Power of ME (s) = " + pME + " kW" + "        " + "Power of AEs = " + pAE + " kW");
             Console.WriteLine("Cf of ME = " + factorCfME + " tC02/tFuel" + "      " + "Cf of AE = " + factorCfAE + " tC02/tFuel");
             Console.WriteLine("SFC of ME = " + sfcME + " g/kWh" + "          " + "SFC of AE = " + sfcAE + " g/kWh");
 
+            // Output Capacity
+
             Console.WriteLine("\nCapacity " + capacity + " tons");
-           
-            
+
+            // Output Vref
+
             if (vRefIn > 0) 
             {
             Console.WriteLine("\nVref = " + (Math.Round(vRef, 2, MidpointRounding.AwayFromZero)) + " knots");
@@ -148,6 +155,8 @@ namespace RPrybluda.EEXI.EEXIconsole
             Console.WriteLine("MCRavg = " + (Math.Round(Vrefapp.mcrAvg, 2, MidpointRounding.AwayFromZero)) + " knots");
             Console.WriteLine("mv = " + (Math.Round(Vrefapp.mv, 2, MidpointRounding.AwayFromZero)) + " knots");
             }
+
+            // Output correction factors
 
             Console.WriteLine("\nCorrection factors:");
             Console.WriteLine("Fj = " + fJ + "   " + "Fi = " + fI + "   " + "Fl = " + fL);

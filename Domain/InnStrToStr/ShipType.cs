@@ -28,6 +28,14 @@ namespace RPrybluda.EEXI.Domain
 
             if (shipType == "8") { shipType = "LNG carrier"; }
 
+            if (shipType == "9") { shipType = "Ro-ro cargo ship (vehicle carrier)"; }
+
+            if (shipType == "10") { shipType = "Ro-ro cargo ship"; }
+
+            if (shipType == "11") { shipType = "Ro-ro passenger ship"; }
+
+            if (shipType == "12") { shipType = "Cruise passenger ship having non-conventional propulsion"; }
+
             return shipType;
         }
     }

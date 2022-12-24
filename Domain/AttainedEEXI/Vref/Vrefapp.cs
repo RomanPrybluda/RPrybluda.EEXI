@@ -10,7 +10,7 @@ namespace RPrybluda.EEXI.Domain
         public static double mcrAvg;
         public static double mv;
 
-        public static double CalcVrefapp(string shipType, double deadweight, double pME)
+        public static double CalcVrefapp(string shipType, double deadweight, double pME, double grossTonnage)
         {
 
             if (shipType == "Bulk carrier")  
@@ -54,11 +54,35 @@ namespace RPrybluda.EEXI.Domain
                 vRefAvg = 8.1391 * Math.Pow(deadweight, 0.05378);
                 mcrAvg = 22.8536 * Math.Pow(deadweight, 0.55820);
             }
-
+            
             if (shipType == "LNG carrier") 
             {
-                vRefAvg = 11.0536 * Math.Pow(deadweight, 0.0503);
+                vRefAvg = 11.0536 * Math.Pow(deadweight, 0.05030);
                 mcrAvg = 20.7096 * Math.Pow(deadweight, 0.63477);
+            }            
+            
+            if (shipType == "Ro-ro cargo ship (vehicle carrier)") 
+            {
+                vRefAvg = 16.6773 * Math.Pow(deadweight, 0.01802);
+                mcrAvg = 262.7693 * Math.Pow(deadweight, 0.39973);
+            }
+                        
+            if (shipType == "Ro-ro cargo ship") 
+            {
+                vRefAvg = 8.0793 * Math.Pow(deadweight, 0.09123);
+                mcrAvg = 37.7708 * Math.Pow(deadweight, 0.63450);
+            }
+                                    
+            if (shipType == "Ro-ro passenger ship") 
+            {
+                vRefAvg = 4.1140 * Math.Pow(deadweight, 0.19863);
+                mcrAvg = 9.1338 * Math.Pow(deadweight, 0.91116);
+            }
+                                                
+            if (shipType == "Cruise passenger ship having non-conventional propulsion") 
+            {
+                vRefAvg = 5.1240 * Math.Pow(grossTonnage, 0.12714);
+                mcrAvg = 1.3550 * Math.Pow(grossTonnage, 0.88664);
             }
 
             if (vRefAvg * 0.05 < 1)

@@ -12,7 +12,7 @@ namespace RPrybluda.EEXI.Domain
 
         static public double refLineValueEEDI;
         
-        public static double CalcRefLineValueEEDI(string shipType, double deadweight)
+        public static double CalcRefLineValueEEDI(string shipType, double deadweight, double grossTonnage)
         {
 
             if (shipType == "Bulk carrier" & deadweight <= 279000) 
@@ -50,14 +50,49 @@ namespace RPrybluda.EEXI.Domain
                 refLineValueEEDI = 227.01 * Math.Pow(deadweight, -0.244);
             }
 
-            else if (shipType == "Combination carrier") // 
+            else if (shipType == "Combination carrier")  
             {
                 refLineValueEEDI = 1219.00 * Math.Pow(deadweight, -0.488);
             }
 
-            else if (shipType == "LNG carrier") // 
+            else if (shipType == "LNG carrier")  
             {
                 refLineValueEEDI = 2253.7 * Math.Pow(deadweight, -0.474);
+            }
+
+            else if (shipType == "Ro-ro cargo ship (vehicle carrier)" & deadweight/grossTonnage < 0.3)  
+            {
+                refLineValueEEDI = Math.Pow(deadweight / grossTonnage, -0.7) * 780.36 * Math.Pow(deadweight, -0.471);
+            }
+            
+            else if (shipType == "Ro-ro cargo ship (vehicle carrier)" & deadweight/grossTonnage >= 0.3)  
+            {
+                refLineValueEEDI = 1812.63 * Math.Pow(deadweight, -0.471);
+            }
+
+            else if (shipType == "Ro-ro cargo ship" & deadweight <= 17000)  
+            {
+                refLineValueEEDI = 1686.17 * Math.Pow(deadweight, -0.498);
+            }
+            
+            else if (shipType == "Ro-ro cargo ship" & deadweight > 17000)  
+            {
+                refLineValueEEDI = 1686.17 * Math.Pow(deadweight, -0.498);
+            }
+
+            else if (shipType == "Ro-ro passenger ship" & deadweight <= 10000)  
+            {
+                refLineValueEEDI = 902.59 * Math.Pow(deadweight, -0.381);
+            }
+            
+            else if (shipType == "Ro-ro passenger ship" & deadweight > 10000)  
+            {
+                refLineValueEEDI = 902.59 * Math.Pow(10000, -0.381);
+            }
+
+            else if (shipType == "Cruise passenger ship having non-conventional propulsion")  
+            {
+                refLineValueEEDI = 170.84 * Math.Pow(grossTonnage, -0.214);
             }
 
             return refLineValueEEDI;

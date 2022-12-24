@@ -12,7 +12,7 @@ namespace RPrybluda.EEXI.Domain
 
         static public double reductFactor;
 
-        public static double CalcReductFactor(string shipType, double deadweight)
+        public static double CalcReductFactor(string shipType, double deadweight, double grossTonnage)
         {
 
             if (shipType == "Bulk carrier")
@@ -128,6 +128,52 @@ namespace RPrybluda.EEXI.Domain
                 if (deadweight >= 10000)
                 { reductFactor = 30; };
             }
+            
+            if (shipType == "Ro-ro cargo ship (vehicle carrier)") 
+            {
+                if (deadweight < 10000)
+                { reductFactor = 0; };
+
+                if (deadweight >= 10000)
+                { reductFactor = 15; };
+            }
+                        
+            if (shipType == "Ro-ro cargo ship") 
+            {
+                if (deadweight <= 1000)
+                { reductFactor = 0; };
+
+                if (deadweight > 1000 & deadweight < 2000)
+                { reductFactor = 0 + (5 - 0) * (deadweight - 1000) / (2000 - 1000); };
+
+                if (deadweight >= 2000)
+                { reductFactor = 5; };
+            }            
+            
+            if (shipType == "Ro-ro passenger ship") 
+            {
+                if (deadweight <= 250)
+                { reductFactor = 0; };
+
+                if (deadweight > 250 & deadweight < 1000)
+                { reductFactor = 0 + (5 - 0) * (deadweight - 250) / (1000 - 250); };
+
+                if (deadweight >= 1000)
+                { reductFactor = 5; };
+            }
+            
+            if (shipType == "Cruise passenger ship having non-conventional propulsion") 
+            {
+                if (grossTonnage <= 25000)
+                { reductFactor = 0; };
+
+                if (grossTonnage > 25000 & grossTonnage < 85000)
+                { reductFactor = 0 + (30 - 0) * (grossTonnage - 25000) / (85000 - 25000); };
+
+                if (grossTonnage >= 85000)
+                { reductFactor = 30; };
+            }
+
 
             return reductFactor;
 

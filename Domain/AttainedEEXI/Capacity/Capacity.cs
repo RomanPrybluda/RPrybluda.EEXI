@@ -10,13 +10,19 @@ namespace RPrybluda.EEXI.Domain
     {
         public static double capacity;
 
-        public static double CalcCapacity(double deadweight, string shipType) // Capacity
+        public static double CalcCapacity(double deadweight, string shipType, double grossTonnage) // Capacity
         {
             if (shipType == "Containership")
             {
                 capacity = 0.70 * deadweight;
             }
-            else // Ship types other than Containership
+
+            if (shipType == "Cruise passenger ship having non-conventional propulsion")
+            {
+                capacity = grossTonnage;
+            }
+
+            else // Other ship types
             {
                 capacity = deadweight;
             }

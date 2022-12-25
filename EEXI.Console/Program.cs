@@ -39,6 +39,19 @@ namespace RPrybluda.EEXI.EEXIconsole
             Console.WriteLine("\nInput GROSS TONNAGES:");
             double grossTonnage = Convert.ToDouble(Console.ReadLine());
 
+            Console.WriteLine("\n--------------------------------------------------------------------------");
+
+            Console.WriteLine("\nInput Volume displacement, m3:");
+            double vDisplacement = Convert.ToDouble(Console.ReadLine());
+            Console.WriteLine("\nInput Length between perpendiculars, m:");
+            double lPP = Convert.ToDouble(Console.ReadLine());
+            Console.WriteLine("\nInput Breadth, m:");
+            double bS = Convert.ToDouble(Console.ReadLine());
+            Console.WriteLine("\nInput Summer load line draught, m:");
+            double dS = Convert.ToDouble(Console.ReadLine());
+
+            Console.WriteLine("\n--------------------------------------------------------------------------");
+
             Console.WriteLine("\nInput Vref: (input 0 if no data)");
             double vRefIn = double.Parse(Console.ReadLine());
 
@@ -84,8 +97,8 @@ namespace RPrybluda.EEXI.EEXIconsole
 
             // Calculation Required EEXI
 
-            double reductFactor = ReductionFactor.CalcReductFactor(shipType, deadweight);
-            double refLineValueEEDI = RefLineValueEEDI.CalcRefLineValueEEDI(shipType, deadweight);
+            double reductFactor = ReductionFactor.CalcReductFactor(shipType, deadweight, grossTonnage);
+            double refLineValueEEDI = RefLineValueEEDI.CalcRefLineValueEEDI(shipType, deadweight, grossTonnage);
             double reqEEXI = RequiredEEXI.CalcReqEEXI(refLineValueEEDI, reductFactor);
 
             // Calculation Attained EEXI
@@ -95,7 +108,7 @@ namespace RPrybluda.EEXI.EEXIconsole
             double pPTO = Ppto.CalcPpto(mcrPTO, pAE);
             double pME = Pme.CalcPme(mcrME, mcrMElim, mcrPTO, pPTO);
 
-            double capacity = Capacity.CalcCapacity(deadweight, shipType);
+            double capacity = Capacity.CalcCapacity(deadweight, shipType,grossTonnage);
             double vRefApp = Vrefapp.CalcVrefapp(shipType, deadweight, pME, grossTonnage);
             double vRef = Vref.CalcVref(vRefIn, vRefApp);
             

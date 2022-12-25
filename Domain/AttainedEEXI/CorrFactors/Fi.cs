@@ -10,13 +10,13 @@ namespace RPrybluda.EEXI.Domain
     //double fIVSE; // Ship specific voluntary structural enhancement
     public static class Fi
     {
-        public static double resultFi;
+        public static double fI;
 
         public static double CalcFi()
         {
-            double resultFi = 1;
+            double fI = 1;
             
-            return resultFi;
+            return fI;
 
         }
     }

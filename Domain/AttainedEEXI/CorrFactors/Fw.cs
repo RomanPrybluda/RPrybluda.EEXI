@@ -6,15 +6,17 @@ using System.Threading.Tasks;
 
 namespace RPrybluda.EEXI.Domain
 {
+
+    // 2.2.9 Factor for speed reduction at sea fW
     public static class Fw
     {
-        public static double resultFm;
+        public static double fW;
 
         public static double CalcFw()
         {
-            double resultFw = 1;
+            double fW = 1;
             
-            return resultFw;
+            return fW;
 
         }
     }

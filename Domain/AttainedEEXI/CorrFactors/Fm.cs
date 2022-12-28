@@ -6,23 +6,26 @@ using System.Threading.Tasks;
 
 namespace RPrybluda.EEXI.Domain
 {
+
+    //  fm (ice class IA Super and IA)
+
     public static class Fm
     {
-        public static double resultFm;
+        public static double fM;
 
-        public static double CalcFm(double iceClass) //  fm (ice class IA Super and IA)
+        public static double CalcFm(string iceClass) 
         {
-            if (iceClass == 1 || iceClass == 2)
+            if (iceClass == "IA Super" || iceClass == "IA")
             {
-                resultFm = 1.05;
+                fM = 1.05;
             }
 
             else
             {
-                resultFm = 1;
+                fM = 1;
             }
 
-            return resultFm;
+            return fM;
 
         }
     }

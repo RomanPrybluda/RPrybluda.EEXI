@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using Microsoft.VisualBasic.FileIO;
 using RPrybluda.EEXI.Domain;
 
@@ -22,7 +23,7 @@ namespace RPrybluda.EEXI.EEXIconsole
             Console.WriteLine("| Input ship name:");
             string shipName = Console.ReadLine();
             Console.WriteLine("|");
-            Console.WriteLine("| Input IMO No.");
+            Console.WriteLine("| Input IMO No.:");
             uint imoNumber = Convert.ToUInt32(Console.ReadLine());
             Console.WriteLine("|");
             Console.WriteLine("| Input ship type:");
@@ -40,6 +41,16 @@ namespace RPrybluda.EEXI.EEXIconsole
             Console.WriteLine("| 0 - N/A  |  1 - IA Super  |  2 - IA   |  3 - IB  |  4 - IC  |");
             string iceClass = Console.ReadLine();
 
+            Console.WriteLine("| Ships was builded under the CSR ?:");
+            Console.WriteLine("| 0 - N/A  |  1 - Yes  |");
+            string shipUnderCSR = Console.ReadLine();
+
+            Console.WriteLine("| Input DWT enhanced design (if N/A input 0):");
+            double deadweightEnhancedDesign = Convert.ToDouble(Console.ReadLine());
+
+            Console.WriteLine("| Input DWT refernce design (if N/A input 0):");
+            double deadweightRefDesign = Convert.ToDouble(Console.ReadLine());
+
             Console.WriteLine("| Input Length between perpendiculars, m:");
             double lPP = Convert.ToDouble(Console.ReadLine());
       
@@ -51,6 +62,9 @@ namespace RPrybluda.EEXI.EEXIconsole
 
             Console.WriteLine("| Input Deadweight, tons:");
             double deadweight = Convert.ToDouble(Console.ReadLine());
+
+            Console.WriteLine("| Input Light weight ship, tons:");
+            double lwt = Convert.ToDouble(Console.ReadLine());
 
             Console.WriteLine("| Input Volume displacement, m3:");
             double vDisplacement = Convert.ToDouble(Console.ReadLine());
@@ -75,21 +89,23 @@ namespace RPrybluda.EEXI.EEXIconsole
             string fuelTypeAE = Console.ReadLine();
    
             Console.WriteLine("| Input SFC ISO of ME (75% MRC), g/kWh (input 0 if no data):");
-            double sfcMEin = double.Parse(Console.ReadLine());
-   
+            double sfcMEin75 = double.Parse(Console.ReadLine());
+            Console.WriteLine("| Input SFC ISO of ME (50% MRC), g/kWh (input 0 if MCRlim = N/A):");
+            double sfcMEin50 = double.Parse(Console.ReadLine());
+
             Console.WriteLine("| Input SFC ISO of AE (50% MRC), g/kWh (input 0 if no data):");
             double sfcAEin = double.Parse(Console.ReadLine());
             Console.WriteLine("|");
             Console.WriteLine("| Input Vref: (input 0 if no data)");
             double vRefIn = double.Parse(Console.ReadLine());
             Console.WriteLine("|");
-            Console.WriteLine("| Input power Shaft generator (s), MCRpto kWh:");
+            Console.WriteLine("| Input power Shaft generator (s), MCRpto, kWh (if N/A input 0):");
             double mcrPTO = double.Parse(Console.ReadLine());
             
-            Console.WriteLine("| Input power Shaft motor (s), MCRpti kWh:");
+            Console.WriteLine("| Input power Shaft motor (s), MCRpti, kWh (if N/A input 0):");
             double mcrPTI = double.Parse(Console.ReadLine());
 
-            Console.WriteLine("| Input crane data (in no crane input 0):");
+            Console.WriteLine("| Input crane data (if N/A cranes input 0):");
             Console.WriteLine("| Crane 01 SWL, tons:");
             double swl01 = double.Parse(Console.ReadLine());
             Console.WriteLine("| Crane 01 Reach, m:");
@@ -107,18 +123,15 @@ namespace RPrybluda.EEXI.EEXIconsole
             Console.WriteLine("| Crane 04 Reach, m:");
             double reach04 = double.Parse(Console.ReadLine());
 
-            Console.WriteLine("\n|Input RoRo ramp weight, tons:");
+            Console.WriteLine("\n|Input Side loaders weight, tons (if N/A input 0):");
+            double sideLoaderWeight = double.Parse(Console.ReadLine());
+
+            Console.WriteLine("\n|Input RoRo ramp weight, tons (if N/A input 0):");
             double rampRoRoWeight = double.Parse(Console.ReadLine());
 
-            Console.WriteLine("\n|Input Side loaders weight, tons:");
-            double sideLoaderWeight = double.Parse(Console.ReadLine());
-            
-            double deadweightCRS = 0;
-            double lwtCSR = 0;
-            
-            double deadweightRefDesign = 0;
-            double deadweightEnhancedDesig = 0;
-
+            double rCT = 0;
+            double rLNG = 0;
+            double rBulkCarrier = 0;
 
             // New ship
 
@@ -127,7 +140,7 @@ namespace RPrybluda.EEXI.EEXIconsole
             fuelTypeME = FuelType.ChooseFuelTypeME(fuelTypeME);
             fuelTypeAE = FuelType.ChooseFuelTypeAE(fuelTypeAE);
 
-            Ship ship = new Ship(shipName, imoNumber, shipType, deadweight, iceClass);
+            Ship ship = new Ship(shipName, imoNumber, shipType, deadweight, lwt, iceClass);
 
             // Calculation Required EEXI
 
@@ -143,23 +156,24 @@ namespace RPrybluda.EEXI.EEXIconsole
 
             double capacity = Capacity.CalcCapacity(deadweight, shipType,grossTonnage);
             double vRefApp = Vrefapp.CalcVrefapp(shipType, deadweight, pME, grossTonnage);
+            double vRefF = VrefF.CalcVrefF(shipType, deadweight, mcrME, grossTonnage);
             double vRef = Vref.CalcVref(vRefIn, vRefApp);
             
-            double sfcME = SFCme.CalcSFCme(sfcMEin);
+            double sfcME = SFCme.CalcSFCme(sfcMEin75, sfcMEin50, mcrME, mcrMElim);
             double sfcAE = SFCae.CalcSFCae(sfcAEin, mcrPTO, sfcME);
-            double factorCfME = CfME.CalcFactorCfME(fuelTypeME, sfcMEin);
+            double factorCfME = CfME.CalcFactorCfME(fuelTypeME, sfcMEin75);
             double factorCfAE = CfAE.CalcFactorCfAE(fuelTypeAE, sfcAEin, mcrPTO, factorCfME);
 
             double cB = Cb.CalcCb(vDisplacement, lPP, bS, dS);
 
             double fJiceClass = FjIceClass.CalcFjICEclass(shipType, deadweight, iceClass, mcrME);
             double fJGeneralCargo = FjGeneralCargo.CalcFjGeneralCargo(shipType, vRef, vDisplacement, cB);
-            double fJRoRo = FjRoRo.CalcFjRoRo(shipType, vDisplacement, lPP, bS, dS, vRef);
+            double fJRoRo = FjRoRo.CalcFjRoRo(shipType, vDisplacement, lPP, bS, dS, vRefF);
             double fJ = Fj.CalcFj(fJiceClass,fJGeneralCargo,fJRoRo);
 
             double fIice = FiIce.CalcFiIce(shipType, deadweight, iceClass, cB);
-            double fIvse = FiVSE.CalcFiVSE(deadweightRefDesign, deadweightEnhancedDesig);
-            double fIcrs = FiCRS.CalcFiCRS(deadweightCRS, lwtCSR);
+            double fIcrs = FiCRS.CalcFiCRS(deadweight, lwt, shipUnderCSR);
+            double fIvse = FiVSE.CalcFiVSE(deadweightRefDesign, deadweightEnhancedDesign);
             double fI = Fi.CalcFi(fIice, fIvse, fIcrs);
 
             double fCranes = Fcranes.CalcFcranes(swl01, swl02, swl03, swl04, reach01, reach02, reach03, reach04, capacity);
@@ -168,7 +182,14 @@ namespace RPrybluda.EEXI.EEXIconsole
             double fL = fCranes * fSideLoader * fRoRoRamp;
             
             double fM = Fm.CalcFm(iceClass);
-            double fC = Fc.CalcFc();
+
+            double fcCT = FcCT.CalcFcCT(shipType, rCT);
+            double fcLNG = FcLNG.CalcFcLNG(shipType, rLNG);
+            double fcRoPax = FcRoPax.CalcFcRoPax(shipType, deadweight, grossTonnage);
+            double fcR = FcR.CalcFcR(shipType, rBulkCarrier);
+            double fcVEHICLE = FcVEHICLE.CalcFcVEHICLE(shipType, deadweight, grossTonnage);
+            double fC = Fc.CalcFc(fcCT, fcLNG, fcRoPax, fcR, fcVEHICLE);
+
             double fW = Fw.CalcFw();
 
             double attEEXI = AttainedEEXI.CalcAttEEXI (pME, factorCfME, sfcME, pAE, factorCfAE, sfcAE, capacity, vRef, fJ, fI, fC, fL, fW, fM);
@@ -181,7 +202,7 @@ namespace RPrybluda.EEXI.EEXIconsole
             Console.WriteLine("|\t1.General information :");
             Console.WriteLine("|");
             Console.WriteLine("|\tShip name: mv " + ship.ShipName);
-            Console.WriteLine("|\tIMO No." + ship.IMOnumber);
+            Console.WriteLine("|\tIMO No.: " + ship.IMOnumber);
             Console.WriteLine("|\tShip type: " + ship.ShipType);
             Console.WriteLine("|\tIce class = " + ship.IceClass);
             Console.WriteLine("|");
@@ -192,7 +213,10 @@ namespace RPrybluda.EEXI.EEXIconsole
             Console.WriteLine("|\tLpp = " + lPP + " m");
             Console.WriteLine("|\tBs = " + bS + " m");
             Console.WriteLine("|\tds = " + dS + " m");
+            Console.WriteLine("|\tVolumentic displacement = " + vDisplacement + " m");
+            Console.WriteLine("|\tCb = " + (Math.Round(cB, 2, MidpointRounding.AwayFromZero)));
             Console.WriteLine("|\tDWT = " + ship.Deadweight + " tonns");
+            Console.WriteLine("|\tLWT = " + ship.LWT + " tonns");
             Console.WriteLine("|");
             Console.WriteLine("|===============================================================================");
 
@@ -201,11 +225,11 @@ namespace RPrybluda.EEXI.EEXIconsole
             Console.WriteLine("|");
             Console.WriteLine("|\t3.Calculation Required EEXI:");
             Console.WriteLine("|");
-            Console.WriteLine("|\tEEDI Reference line value = " + (Math.Round(refLineValueEEDI, 3, MidpointRounding.AwayFromZero)) + " g-CO2/tonMile");
+            Console.WriteLine("|\tEEDI Reference line value = " + (Math.Round(refLineValueEEDI, 2, MidpointRounding.AwayFromZero)) + " g-CO2/tonMile");
             Console.WriteLine("|\tReduction factor = " + (Math.Round(reductFactor, 1, MidpointRounding.AwayFromZero)));
             Console.WriteLine("|\t------------------------------------------------------------------");
             Console.WriteLine("|");
-            Console.WriteLine("|\tRequired EEXI = " + (Math.Round(reqEEXI, 3, MidpointRounding.AwayFromZero)) + " gCO2/t.NM");
+            Console.WriteLine("|\tRequired EEXI = " + (Math.Round(reqEEXI, 2, MidpointRounding.AwayFromZero)) + " gCO2/t.NM");
             Console.WriteLine("|");
             Console.WriteLine("|===============================================================================");
 
@@ -218,17 +242,17 @@ namespace RPrybluda.EEXI.EEXIconsole
 
             Console.WriteLine("|");
             Console.WriteLine("|\tPower of ME (s) = " + (Math.Round(pME, 2, MidpointRounding.AwayFromZero)  + " kW"));
-            Console.WriteLine("|\tCf of ME = " + factorCfME + " tC02/tFuel");
-            Console.WriteLine("|\tSFC of ME = " + sfcME + " g/kWh");
+            Console.WriteLine("|\tCf of ME = " + (Math.Round(factorCfME, 2, MidpointRounding.AwayFromZero)) + " tC02/tFuel");
+            Console.WriteLine("|\tSFC of ME = " + (Math.Round(sfcME, 2, MidpointRounding.AwayFromZero))  + " g/kWh");
             Console.WriteLine("|");
             Console.WriteLine("|\t------------------------------------------------------------------");
 
             // Output Auxiliry Engines data
 
             Console.WriteLine("|");
-            Console.WriteLine("|\tPower of AEs = " + (Math.Round(pAE, 2, MidpointRounding.AwayFromZero) + " kW"));
-            Console.WriteLine("|\tCf of AE = " + factorCfAE + " tC02/tFuel");
-            Console.WriteLine("|\tSFC of AE = " + sfcAE + " g/kWh");
+            Console.WriteLine("|\tPower of AEs = " + (Math.Round(pAE, 2, MidpointRounding.AwayFromZero)) + " kW");
+            Console.WriteLine("|\tCf of AE = " + (Math.Round(factorCfAE, 2, MidpointRounding.AwayFromZero)) + " tC02/tFuel");
+            Console.WriteLine("|\tSFC of AE = " + (Math.Round(sfcAE, 2, MidpointRounding.AwayFromZero)) + " g/kWh");
             Console.WriteLine("|");
             Console.WriteLine("|\t------------------------------------------------------------------");
 
@@ -267,43 +291,55 @@ namespace RPrybluda.EEXI.EEXIconsole
             Console.WriteLine("|");
             Console.WriteLine("|");
             
-            Console.WriteLine("|\tFj = " + (Math.Round(fJ, 3, MidpointRounding.AwayFromZero)));
-            Console.WriteLine("|");
-            Console.WriteLine("|\tFj ice class = " + (Math.Round(fJiceClass, 3, MidpointRounding.AwayFromZero)) + "  " +
-                              "( Fj0 = " + (Math.Round(FjIceClass.fJ0, 3, MidpointRounding.AwayFromZero)) + "  " +
-                              "Fjmin = " + (Math.Round(FjIceClass.fJmin, 3, MidpointRounding.AwayFromZero)) + " )");
-            Console.WriteLine("|\tFj Ro-Ro = " + (Math.Round(fJRoRo, 3, MidpointRounding.AwayFromZero)) + "  " +
-                               "Fnl = " + (Math.Round(FjRoRo.fNl, 3, MidpointRounding.AwayFromZero)));
-            Console.WriteLine("|\tFj General Cargo = " + (Math.Round(fJGeneralCargo, 3, MidpointRounding.AwayFromZero)) + "  " +
-                              "Fnv = " + (Math.Round(FjGeneralCargo.fNv, 3, MidpointRounding.AwayFromZero)));
+            Console.WriteLine("|\tFj = " + (Math.Round(fJ, 2, MidpointRounding.AwayFromZero)));
+            Console.WriteLine("|\t----------");
+            Console.WriteLine("|\tFj ice class = " + (Math.Round(fJiceClass, 2, MidpointRounding.AwayFromZero)) + "  " +
+                              "( Fj0 = " + (Math.Round(FjIceClass.fJ0, 2, MidpointRounding.AwayFromZero)) + "  " +
+                              "Fjmin = " + (Math.Round(FjIceClass.fJmin, 2, MidpointRounding.AwayFromZero)) + " )");
+
+            Console.WriteLine("|\tFj Ro-Ro = " + (Math.Round(fJRoRo, 2, MidpointRounding.AwayFromZero)) + "  " +
+                               "( Fnl = " + (Math.Round(FjRoRo.fNl, 2, MidpointRounding.AwayFromZero)) + "  " +
+                               "VrefF = " + (Math.Round(VrefF.vRefF, 2, MidpointRounding.AwayFromZero)) + " )");
+
+            Console.WriteLine("|\tFj General Cargo = " + (Math.Round(fJGeneralCargo, 2, MidpointRounding.AwayFromZero)) + "  " +
+                              "( Fnv = " + (Math.Round(FjGeneralCargo.fNv, 2, MidpointRounding.AwayFromZero)) + " )");
             Console.WriteLine("|\t-----------------------------------------------------------"); 
             
-            Console.WriteLine("|\tFi = " + (Math.Round(fI, 3, MidpointRounding.AwayFromZero)));
-            Console.WriteLine("|");
-            Console.WriteLine("|\tFiIce = " + (Math.Round(fIice, 3, MidpointRounding.AwayFromZero)));
-            Console.WriteLine("|\t( Fi(ice class) = " + (Math.Round(FiIce.fIiceClass, 3, MidpointRounding.AwayFromZero)) + "  " +
-                  "FiCb = " + (Math.Round(FiIce.fIcB, 3, MidpointRounding.AwayFromZero)) + "  " +
-                  "Cb ref design = " + (Math.Round(FiIce.cBrefdesign, 3, MidpointRounding.AwayFromZero)) + " )");
-            Console.WriteLine("|\tFiVSE = " + (Math.Round(fIvse, 3, MidpointRounding.AwayFromZero)));
-            Console.WriteLine("|\tFiCRS = " + (Math.Round(fIcrs, 3, MidpointRounding.AwayFromZero)));
+            Console.WriteLine("|\tFi = " + (Math.Round(fI, 2, MidpointRounding.AwayFromZero)));
+            Console.WriteLine("|\t----------");
+            Console.WriteLine("|\tFiIce = " + (Math.Round(fIice, 2, MidpointRounding.AwayFromZero)));
+            Console.WriteLine("|\t( Fi(ice class) = " + (Math.Round(FiIce.fIiceClass, 2, MidpointRounding.AwayFromZero)) + "  " +
+                  "FiCb = " + (Math.Round(FiIce.fIcB, 2, MidpointRounding.AwayFromZero)) + "  " +
+                  "Cb ref design = " + (Math.Round(FiIce.cBrefdesign, 2, MidpointRounding.AwayFromZero)) + " )");
+            Console.WriteLine("|\tFiVSE = " + (Math.Round(fIvse, 2, MidpointRounding.AwayFromZero)));
+            Console.WriteLine("|\t( DWT ref Design = " + deadweightRefDesign + "  " + "DWT enhanced Design = "  + deadweightEnhancedDesign + " )");
+            Console.WriteLine("|\tFiCRS = " + (Math.Round(fIcrs, 2, MidpointRounding.AwayFromZero)));
             Console.WriteLine("|\t-----------------------------------------------------------");
             
-            Console.WriteLine("|\tFc = " + (Math.Round(fC, 3, MidpointRounding.AwayFromZero)));
+            Console.WriteLine("|\tFc = " + (Math.Round(fC, 2, MidpointRounding.AwayFromZero)));
+            Console.WriteLine("|\t----------");
+            Console.WriteLine("|\tFcCT = " + (Math.Round(fcCT, 2, MidpointRounding.AwayFromZero)));
+            Console.WriteLine("|\tFcLNG = " + (Math.Round(fcLNG, 2, MidpointRounding.AwayFromZero)));
+            Console.WriteLine("|\tFcRoPax = " + (Math.Round(fcRoPax, 2, MidpointRounding.AwayFromZero)));
+            Console.WriteLine("|\tFcR = " + (Math.Round(fcR, 3, MidpointRounding.AwayFromZero)));
+            Console.WriteLine("|\tFcVIHICLE = " + (Math.Round(fcVEHICLE, 2, MidpointRounding.AwayFromZero)));
             Console.WriteLine("|\t-----------------------------------------------------------");
             
-            Console.WriteLine("|\tFl = " + (Math.Round(fL, 3, MidpointRounding.AwayFromZero)));
+            Console.WriteLine("|\tFl = " + (Math.Round(fL, 2, MidpointRounding.AwayFromZero)));
+            Console.WriteLine("|\t----------");
+            Console.WriteLine("|\tF cranes = " + (Math.Round(fCranes, 2, MidpointRounding.AwayFromZero)));
+            Console.WriteLine("|\tF sideloader = " + (Math.Round(fSideLoader, 2, MidpointRounding.AwayFromZero)));
+            Console.WriteLine("|\tF Ro-Ro Ramp = " + (Math.Round(fRoRoRamp, 2, MidpointRounding.AwayFromZero)));
+            Console.WriteLine("|\t-----------------------------------------------------------");
+
+            Console.WriteLine("|\tFw = " + (Math.Round(fW, 2, MidpointRounding.AwayFromZero)));
+            Console.WriteLine("|\t-----------------------------------------------------------");
+
+            Console.WriteLine("|\tFm = " + (Math.Round(fM, 2, MidpointRounding.AwayFromZero)));
+            Console.WriteLine("|\t-----------------------------------------------------------");
+
             Console.WriteLine("|");
-            
-            Console.WriteLine("|\tFcranes = " + (Math.Round(fCranes, 3, MidpointRounding.AwayFromZero)));
-            Console.WriteLine("|\tFsideloader = " + (Math.Round(fSideLoader, 3, MidpointRounding.AwayFromZero)));
-            Console.WriteLine("|\tFRoRoRamp = " + (Math.Round(fRoRoRamp, 3, MidpointRounding.AwayFromZero)));
-            Console.WriteLine("|\t-----------------------------------------------------------");
-            Console.WriteLine("|\tFw = " + (Math.Round(fW, 3, MidpointRounding.AwayFromZero)));
-            Console.WriteLine("|\t-----------------------------------------------------------");
-            Console.WriteLine("|\tFm = " + (Math.Round(fM, 3, MidpointRounding.AwayFromZero)));
-            Console.WriteLine("|\t-----------------------------------------------------------");
-            Console.WriteLine("|");
-            Console.WriteLine("|\tAttained EEXI = " + (Math.Round(attEEXI, 3, MidpointRounding.AwayFromZero)) + " gCO2/t.NM");
+            Console.WriteLine("|\tAttained EEXI = " + (Math.Round(attEEXI, 2, MidpointRounding.AwayFromZero)) + " gCO2/t.NM");
             Console.WriteLine("|");
             Console.WriteLine("|===============================================================================");
 
@@ -317,7 +353,7 @@ namespace RPrybluda.EEXI.EEXIconsole
             {
                 Console.WriteLine("|\tAttained EEXI equal Required EEXI");
                 Console.WriteLine("|");
-                Console.WriteLine("|\tAttained EEXI = " + (Math.Round(attEEXI, 3, MidpointRounding.AwayFromZero)) + " gCO2/t.NM " + " = " + "Required EEXI = " + (Math.Round(reqEEXI, 3, MidpointRounding.AwayFromZero)) + " gCO2/t.NM ");
+                Console.WriteLine("|\tAttained EEXI = " + (Math.Round(attEEXI, 2, MidpointRounding.AwayFromZero)) + " gCO2/t.NM " + " = " + "Required EEXI = " + (Math.Round(reqEEXI, 2, MidpointRounding.AwayFromZero)) + " gCO2/t.NM ");
                 Console.WriteLine("|");
                 Console.WriteLine("|\tSince the attained EEXI is less than the required EEXI,");
                 Console.WriteLine("|\tnthen the vessel complies with the energy efficiency requirements.");
@@ -328,7 +364,7 @@ namespace RPrybluda.EEXI.EEXIconsole
             {
                 Console.WriteLine("|\tAttained EEXI equal Required EEXI");
                 Console.WriteLine("|");
-                Console.WriteLine("|\tAttained EEXI = " + (Math.Round(attEEXI, 3, MidpointRounding.AwayFromZero)) + " gCO2/t.NM " + " < " + "Required EEXI = " + (Math.Round(reqEEXI, 3, MidpointRounding.AwayFromZero)) + " gCO2/t.NM ");
+                Console.WriteLine("|\tAttained EEXI = " + (Math.Round(attEEXI, 2, MidpointRounding.AwayFromZero)) + " gCO2/t.NM " + " < " + "Required EEXI = " + (Math.Round(reqEEXI, 2, MidpointRounding.AwayFromZero)) + " gCO2/t.NM ");
                 Console.WriteLine("|");
                 Console.WriteLine("|\tSince the attained EEXI is less than the required EEXI,");
                 Console.WriteLine("|\tnthen the vessel complies with the energy efficiency requirements.");
@@ -340,7 +376,7 @@ namespace RPrybluda.EEXI.EEXIconsole
             {
                 Console.WriteLine("|\tAttained EEXI equal Required EEXI");
                 Console.WriteLine("|");
-                Console.WriteLine("|\tAttained EEXI = " + (Math.Round(attEEXI, 3, MidpointRounding.AwayFromZero)) + " gCO2/t.NM " + " > " + "Required EEXI = " + (Math.Round(reqEEXI, 3, MidpointRounding.AwayFromZero)) + " gCO2/t.NM ");
+                Console.WriteLine("|\tAttained EEXI = " + (Math.Round(attEEXI, 2, MidpointRounding.AwayFromZero)) + " gCO2/t.NM " + " > " + "Required EEXI = " + (Math.Round(reqEEXI, 2, MidpointRounding.AwayFromZero)) + " gCO2/t.NM ");
                 Console.WriteLine("|");
                 Console.WriteLine("|\tSince the resulting EEXI more requires the EEXI,");
                 Console.WriteLine("|\tis necessary to provide an action");

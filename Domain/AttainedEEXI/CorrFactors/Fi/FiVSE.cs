@@ -13,16 +13,16 @@ namespace RPrybluda.EEXI.Domain
     {
         public static double fIvse;
 
-        public static double CalcFiVSE(double deadweightRefDesign, double deadweightEnhancedDesig)
+        public static double CalcFiVSE(double deadweightRefDesign, double deadweightEnhancedDesign)
         {
-            if (deadweightRefDesign == 0 & deadweightEnhancedDesig == 0)
+            if (deadweightRefDesign == 0 & deadweightEnhancedDesign == 0)
             {
                 fIvse = 1; 
             }
-            
-            else
+
+            if (deadweightRefDesign != 0 & deadweightEnhancedDesign != 0)
             {
-                fIvse = deadweightRefDesign / deadweightEnhancedDesig;
+                fIvse = deadweightRefDesign / deadweightEnhancedDesign;
             }
             
             return fIvse;

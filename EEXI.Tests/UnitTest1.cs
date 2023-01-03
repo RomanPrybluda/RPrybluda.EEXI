@@ -1,24 +1,38 @@
-﻿using System;
+using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using RPrybluda.EEXI.Domain;
 
 
-namespace RPrybluda.EEXI.Domain
+namespace RPrybluda.EEXI.Tests
 {
-
-    public static class SFCme
+    public class Tests
     {
+        [SetUp]
+        public void Setup()
+        {
+        }
 
         public static double sfcME;
 
-        public static double CalcSFCme(double sfcMEin75, double sfcMEin50, double mcrME, double mcrMElim)
+        double sfcMEin75 = 231.86;
+        double sfcMEin50 = 209.38;
+
+        double mcrME = 5296;
+        double mcrMElim = 3620;
+
+
+        [Test]
+        public void Test_sfcME ()
         {
-            if (sfcME == 0) 
+
+            if (sfcME == 0)
             {
-               sfcME = SFCapp.SFCmeApp;
+                sfcME = SFCapp.SFCmeApp;
             }
 
             if (sfcME > 0 & mcrMElim == 0)
@@ -31,17 +45,7 @@ namespace RPrybluda.EEXI.Domain
                 sfcME = sfcMEin75 + (sfcMEin50 - sfcMEin75) * (0.83 * mcrMElim - 0.75 * mcrME) / (0.5 * mcrME - 0.75 * mcrME);
             }
 
-            return sfcME;
-
-        }    
-     }       
-}            
-
-            
-            
-                   
-       
-        
-
-    
-
+            Assert.IsTrue(sfcME == 212.622);
+        }
+    }
+}

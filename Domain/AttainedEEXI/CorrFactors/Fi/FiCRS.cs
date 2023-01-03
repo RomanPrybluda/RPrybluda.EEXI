@@ -13,17 +13,22 @@ namespace RPrybluda.EEXI.Domain
     public static class FiCRS
     {
         public static double fIcrs;
+        public static double deadweightCRS;
+        public static double lwtCSR;
 
-        public static double CalcFiCRS(double deadweightCRS, double lwtCSR)
+        public static double CalcFiCRS(double deadweight, double lwt, string shipUnderCSR)
         {
-            if (deadweightCRS == 0 & lwtCSR == 0)
+            if (shipUnderCSR == "1")
             {
-                fIcrs = 1;
+                deadweightCRS = deadweight;
+                lwtCSR = lwt;
+
+                fIcrs = 1 + 0.08 * lwtCSR / deadweightCRS;
             }
 
-            else
+            if (shipUnderCSR == "0")
             {
-                fIcrs = 1 + 0.08 * lwtCSR / deadweightCRS;
+                fIcrs = 1;
             }
 
             return fIcrs;

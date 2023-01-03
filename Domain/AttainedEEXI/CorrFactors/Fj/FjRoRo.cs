@@ -23,10 +23,10 @@ namespace RPrybluda.EEXI.Domain
         public static double gammaPass = 0.75;
         public static double sigmaPass = 1.00;
         
-        public static double CalcFjRoRo(string shipType, double vDisplacement, double lPP, double bS, double dS, double vRef)
+        public static double CalcFjRoRo(string shipType, double vDisplacement, double lPP, double bS, double dS, double vRefF)
         {
 
-            fNl = 0.5144 * vRef / ( Math.Sqrt(lPP * 9.81)); 
+            fNl = 0.5144 * vRefF / ( Math.Sqrt(lPP * 9.81)); 
             double vDisplacement033 = Math.Pow(vDisplacement, 0.333);
 
 

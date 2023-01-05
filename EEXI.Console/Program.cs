@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using Microsoft.VisualBasic.FileIO;
 using RPrybluda.EEXI.Domain;
+using RPrybluda.EEXI.Persistence;
 
 namespace RPrybluda.EEXI.EEXIconsole
 {
@@ -242,7 +243,7 @@ namespace RPrybluda.EEXI.EEXIconsole
 
             Console.WriteLine("|");
             Console.WriteLine("|\tPower of ME (s) = " + (Math.Round(pME, 2, MidpointRounding.AwayFromZero)  + " kW"));
-            Console.WriteLine("|\tCf of ME = " + (Math.Round(factorCfME, 2, MidpointRounding.AwayFromZero)) + " tC02/tFuel");
+            Console.WriteLine("|\tCf of ME = " + (Math.Round(factorCfME, 3, MidpointRounding.AwayFromZero)) + " tC02/tFuel");
             Console.WriteLine("|\tSFC of ME = " + (Math.Round(sfcME, 2, MidpointRounding.AwayFromZero))  + " g/kWh");
             Console.WriteLine("|");
             Console.WriteLine("|\t------------------------------------------------------------------");
@@ -251,7 +252,7 @@ namespace RPrybluda.EEXI.EEXIconsole
 
             Console.WriteLine("|");
             Console.WriteLine("|\tPower of AEs = " + (Math.Round(pAE, 2, MidpointRounding.AwayFromZero)) + " kW");
-            Console.WriteLine("|\tCf of AE = " + (Math.Round(factorCfAE, 2, MidpointRounding.AwayFromZero)) + " tC02/tFuel");
+            Console.WriteLine("|\tCf of AE = " + (Math.Round(factorCfAE, 3, MidpointRounding.AwayFromZero)) + " tC02/tFuel");
             Console.WriteLine("|\tSFC of AE = " + (Math.Round(sfcAE, 2, MidpointRounding.AwayFromZero)) + " g/kWh");
             Console.WriteLine("|");
             Console.WriteLine("|\t------------------------------------------------------------------");

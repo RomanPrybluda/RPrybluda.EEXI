@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>RPrybluda.$(MSBuildProjectName)</AssemblyName>
+    <RootNamespace>RPrybluda.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\EEXI.Domain\EEXI.Domain.csproj" />
+		<ProjectReference Include="..\EEXI.Persistence\EEXI.Persistence.csproj" />
+	</ItemGroup>	
+	
+</Project>

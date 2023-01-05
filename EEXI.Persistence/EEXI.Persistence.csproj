@@ -1,9 +1,13 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>RPrybluda.EEXI.$(MSBuildProjectName)</AssemblyName>
     <RootNamespace>RPrybluda.EEXI.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EEXI.Domain\EEXI.Domain.csproj" />
+  </ItemGroup>
 
 </Project>
